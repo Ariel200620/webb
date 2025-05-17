@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fortune Line</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-image: linear-gradient(
+          rgba(0, 0, 0, 0.5),
+          rgba(0, 0, 0, 0.5)
+        ),
+        url(d86a69f18bcb6c69aba18c27e6cf58fb.gif);
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center center;
+      background-attachment: fixed;
+      color: #ffffff;
+    }
+
+    header {
+      background-color: #1c1f24;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+    }
+
+    header img {
+      height: 50px;
+      cursor: pointer;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: #58a6ff;
+    }
+
+    /* Estilo para el botón cerrar sesión dentro del nav */
+    #btnCerrarSesion {
+      background-color: transparent;
+      border: 1px solid #58a6ff;
+      color: #58a6ff;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.2s, color 0.2s;
+    }
+    #btnCerrarSesion:hover {
+      background-color: #58a6ff;
+      color: #0d1117;
+    }
+
+    .submenu {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 30px;
+    }
+
+    .ordenar select {
+      background-color: #0d1117;
+      color: white;
+      border: 1px solid #2f3b4a;
+      padding: 5px;
+      border-radius: 6px;
+    }
+
+    .gemas-display {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .gemas-display img {
+      height: 24px;
+    }
+
+    .gemas-display a {
+      background-color: #2563eb;
+      color: white;
+      padding: 5px 10px;
+      padding-right: 2px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    #raspaginana {
+      text-align: center;
+      padding: 50px;
+      background-color: #0d1117;
+      margin-top: 30px;
+      border-radius: 10px;
+    }
+
+    #raspaginana h2 {
+      color: #ffffff;
+      margin-bottom: 20px;
+    }
+
+    #scratch-card-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    #scratchCanvas {
+      border-radius: 12px;
+      background-color: #ccc;
+      cursor: pointer;
+    }
+
+    #scratchMessage {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      font-size: 20px;
+      font-weight: bold;
+      display: none;
+      pointer-events: none;
+      text-align: center;
+      width: 90%;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #161b22;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="Logo" onclick="window.location.href='index.html';" />
+    <nav>
+      <a href="perfil.html">Perfil</a>
+      <a href="tienda.html">Tienda</a>
+      <a href="futbol.html">Fútbol</a>
+      <a href="#">Contáctanos</a>
+      <button id="btnCerrarSesion" onclick="cerrarSesion()">Cerrar sesión</button>
+    </nav>
+  </header>
+
+  <section id="raspaginana">
+    <h2>🎉 Raspa y Gana 🎉</h2>
+    <p>¡Compra una tarjeta por 25 gemas y gana premios! <br /> ¡Rasca la tarjeta para descubrir tu premio!</p>
+
+    <div class="gemas-display">
+      <img src="gema.jpg" alt="Gemas" />
+      <span id="gemas-count">50</span>
+    </div>
+
+    <button
+      id="comprarTarjeta"
+      style="background-color: #2563eb; color: white; padding: 10px 20px; border-radius: 6px; margin-top: 20px; cursor: pointer"
+    >
+      Comprar Tarjeta (25 Gemas)
+    </button>
+
+    <div id="scratch-card-container" style="margin-top: 30px; display: none;">
+      <canvas id="scratchCanvas" width="300" height="150"></canvas>
+      <div id="scratchMessage"></div>
+    </div>
+  </section>
+
+  <footer>&copy; 2025 Casino Virtual. Todos los derechos reservados.</footer>
+
+  <script>
+    // Sincronización con localStorage
+    if (!localStorage.getItem('gemas')) {
+      localStorage.setItem('gemas', '50'); // Valor inicial de gemas
+    }
+
+    // Obtener gemas desde localStorage
+    let gemasActuales = parseInt(localStorage.getItem('gemas'));
+    document.getElementById('gemas-count').textContent = gemasActuales;
+
+    const premios = [
+      { mensaje: '¡Ganaste 10 gemas!', gemas: 10 },
+      { mensaje: '¡Ganaste 25 gemas!', gemas: 25 },
+      { mensaje: '¡Ganaste 50 gemas!', gemas: 50 },
+      { mensaje: '¡Casi! Sigue intentando', gemas: 0 },
+      { mensaje: '¡Nada esta vez!', gemas: 0 },
+    ];
+
+    const comprarBtn = document.getElementById('comprarTarjeta');
+    const scratchContainer = document.getElementById('scratch-card-container');
+    const scratchCanvas = document.getElementById('scratchCanvas');
+    const ctx = scratchCanvas.getContext('2d');
+    const scratchMessage = document.getElementById('scratchMessage');
+
+    let premioSeleccionado;
+    let tarjetaActiva = false; // Controla si hay tarjeta sin raspar
+    let isDrawing = false;
+
+    comprarBtn.addEventListener('click', () => {
+      if (tarjetaActiva) {
+        alert('Debes terminar de raspar la tarjeta actual antes de comprar otra.');
+        return;
+      }
+      if (gemasActuales >= 25) {
+        gemasActuales -= 25;
+        localStorage.setItem('gemas', gemasActuales); // Actualizar gemas en localStorage
+        document.getElementById('gemas-count').textContent = gemasActuales;
+
+        // Elegir premio aleatorio
+        premioSeleccionado = premios[Math.floor(Math.random() * premios.length)];
+        scratchMessage.textContent = '¡Rasca para descubrir tu premio!';
+        scratchMessage.style.display = 'block';
+
+        // Preparar tarjeta raspable
+        scratchContainer.style.display = 'block';
+        ctx.clearRect(0, 0, scratchCanvas.width, scratchCanvas.height);
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = '#999';
+        ctx.fillRect(0, 0, scratchCanvas.width, scratchCanvas.height);
+        ctx.globalCompositeOperation = 'destination-out';
+
+        tarjetaActiva = true;
+      } else {
+        alert('No tienes suficientes gemas para comprar una tarjeta.');
+      }
+    });
+
+    // Función para raspar
+    function handleScratch(e) {
+      if (!tarjetaActiva || !isDrawing) return; // No permite raspar sin tarjeta activa
+      const rect = scratchCanvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      ctx.beginPath();
+      ctx.arc(x, y, 15, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+
+    scratchCanvas.addEventListener('mousedown', () => (isDrawing = true));
+    scratchCanvas.addEventListener('mouseup', () => {
+      isDrawing = false;
+      checkScratchProgress();
+    });
+    scratchCanvas.addEventListener('mousemove', handleScratch);
+
+    // Verificar progreso
+    function checkScratchProgress() {
+      if (!tarjetaActiva) return;
+      const pixels = ctx.getImageData(0, 0, scratchCanvas.width, scratchCanvas.height).data;
+      let transparent = 0;
+      for (let i = 3; i < pixels.length; i += 4) {
+        if (pixels[i] === 0) transparent++;
+      }
+      const percent = (transparent / (scratchCanvas.width * scratchCanvas.height)) * 100;
+      if (percent > 40) {
+        revealPrize();
+      }
+    }
+
+    // Mostrar el premio
+    function revealPrize() {
+      scratchMessage.textContent = premioSeleccionado.mensaje;
+      scratchMessage.style.display = 'block';
+      if (premioSeleccionado.gemas > 0) {
+        gemasActuales += premioSeleccionado.gemas;
+        localStorage.setItem('gemas', gemasActuales);
+        document.getElementById('gemas-count').textContent = gemasActuales;
+      }
+      tarjetaActiva = false; // Marca que ya raspaste la tarjeta
+    }
+
+    function cerrarSesion() {
+      localStorage.clear();
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

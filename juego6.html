@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Piedra, Papel o Tijera</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url(d86a69f18bcb6c69aba18c27e6cf58fb.gif); /* Fondo */
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #000000;
+      margin-bottom: 20px;
+    }
+
+    .gemas {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-weight: bold;
+      color: #ffcc00;
+      background-color: #161b22cc;
+      padding: 10px 20px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .gemas img {
+      width: 24px;  /* Aquí aumenté el tamaño */
+      height: 24px;
+      object-fit: contain;
+    }
+
+    /* Botón para volver a login.html */
+    #btnInicio {
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      background-color: #2563eb;
+      border: none;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.2s;
+    }
+    #btnInicio:hover {
+      background-color: #1e4db7;
+    }
+
+    .input-apuesta {
+      margin-bottom: 20px;
+    }
+
+    input[type="number"] {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      width: 150px;
+      background-color: #0d1117;
+      color: white;
+      border: 1px solid #333;
+    }
+
+    .choices {
+      display: flex;
+      gap: 30px;
+      margin-bottom: 20px;
+    }
+
+    .choices img {
+      width: 120px;
+      height: 120px;
+      cursor: pointer;
+      border: 3px solid transparent;
+      border-radius: 12px;
+      transition: transform 0.2s, border 0.2s;
+    }
+
+    .choices img:hover {
+      transform: scale(1.1);
+      border-color: #58a6ff;
+    }
+
+    .result {
+      font-size: 18px;
+      margin-top: 20px;
+      color: #58ffab;
+    }
+  </style>
+</head>
+<body>
+  <button id="btnInicio" onclick="window.location.href='index.html'">Inicio</button>
+  
+  <div class="gemas"><img src="gema.jpg" alt="Gema">  <span id="contadorGemas">0</span></div>
+
+  <h1>Piedra, Papel o Tijera</h1>
+
+  <div class="input-apuesta">
+    <label for="apuesta">Apuesta tus gemas:</label><br>
+    <input type="number" id="apuesta" placeholder="Ej: 10" min="1">
+  </div>
+
+  <div class="choices">
+    <img src="piedra.gif" alt="Piedra" onclick="jugar('piedra')" />
+    <img src="papel.gif" alt="Papel" onclick="jugar('papel')" />
+    <img src="tijera.gif" alt="Tijera" onclick="jugar('tijera')" />
+  </div>
+
+  <div class="result" id="resultado"></div>
+
+<script>
+let gemas = parseInt(localStorage.getItem("gemas"));
+
+if (!isNaN(gemas)) {
+  document.getElementById("contadorGemas").textContent = gemas;
+} else {
+  gemas = 0;
+  localStorage.setItem("gemas", gemas);
+  document.getElementById("contadorGemas").textContent = gemas;
+}
+
+let ultimaEleccionCPU = null;
+
+function jugar(eleccionUsuario) {
+  const apuesta = parseInt(document.getElementById("apuesta").value);
+
+  if (isNaN(apuesta) || apuesta <= 0) {
+    alert("Por favor, ingresa una cantidad válida de gemas.");
+    return;
+  }
+
+  if (apuesta < 75) {
+    alert("La apuesta mínima es de 75 gemas.");
+    return;
+  }
+
+  if (apuesta > gemas) {
+    alert("No tienes suficientes gemas para apostar.");
+    return;
+  }
+
+  const opciones = ['piedra', 'papel', 'tijera'];
+
+  let eleccionCPU;
+  do {
+    eleccionCPU = opciones[Math.floor(Math.random() * 3)];
+  } while (eleccionCPU === ultimaEleccionCPU);
+
+  ultimaEleccionCPU = eleccionCPU;
+
+  let resultadoTexto = `La máquina eligió ${eleccionCPU}. `;
+
+  if (eleccionUsuario === eleccionCPU) {
+    gemas -= apuesta;
+    resultadoTexto += `¡Empate! Pierdes toda tu apuesta de ${apuesta} gemas.`;
+  } else if (
+    (eleccionUsuario === 'piedra' && eleccionCPU === 'tijera') ||
+    (eleccionUsuario === 'papel' && eleccionCPU === 'piedra') ||
+    (eleccionUsuario === 'tijera' && eleccionCPU === 'papel')
+  ) {
+    const ganancia = Math.floor(apuesta * 1.8);
+    gemas += ganancia;
+    resultadoTexto += `¡Ganaste! Ganas ${ganancia} gemas.`;
+  } else {
+    gemas -= apuesta;
+    resultadoTexto += `Perdiste ${apuesta} gemas.`;
+  }
+
+  document.getElementById("contadorGemas").textContent = gemas;
+  localStorage.setItem("gemas", gemas);
+
+  document.getElementById("resultado").textContent = resultadoTexto;
+}
+</script>
+
+</body>
+</html>

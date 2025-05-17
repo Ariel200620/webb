@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Rojo y Negro</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: url('d86a69f18bcb6c69aba18c27e6cf58fb.gif');
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+      position: relative;
+    }
+
+    .cuadro {
+      background-color: rgba(10, 10, 20, 0.85);
+      border-radius: 15px;
+      padding: 40px 30px;
+      text-align: center;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 15px;
+    }
+
+    p {
+      font-size: 16px;
+      margin-bottom: 25px;
+    }
+
+    button {
+      padding: 12px 25px;
+      margin: 10px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    .rojo {
+      background-color: red;
+    }
+
+    .negro {
+      background-color: black;
+    }
+
+    #resultado {
+      margin-top: 20px;
+      font-size: 20px;
+    }
+
+    #gemas {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
+    /* Botón para volver a login.html */
+    #btnInicio {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: #2563eb;
+      border: none;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.2s;
+      z-index: 1000;
+    }
+    #btnInicio:hover {
+      background-color: #1e4db7;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="btnInicio" onclick="window.location.href='index.html'">Inicio</button>
+
+  <div class="cuadro">
+    <h1>🎲 Apuesta al color p</h1>
+    <p>¡Apuesta 25 gemas al color correcto y gana 50!</p>
+
+    <button class="rojo" onclick="apostar('rojo')">Rojo</button>
+    <button class="negro" onclick="apostar('negro')">Negro</button>
+
+    <div id="resultado"></div>
+    <div id="gemas">Gemas: <span id="gemas-count">0</span></div>
+  </div>
+
+  <script>
+    // Inicializar gemas en localStorage si no existen
+    if (!localStorage.getItem('gemas')) {
+      localStorage.setItem('gemas', '50');
+    }
+
+    // Obtener gemas actuales
+    let gemasActuales = parseInt(localStorage.getItem('gemas'));
+    document.getElementById('gemas-count').textContent = gemasActuales;
+
+    function apostar(eleccion) {
+      const costo = 25;
+      const recompensa = 50;
+
+      if (gemasActuales < costo) {
+        document.getElementById('resultado').textContent = "❌ No tienes suficientes gemas.";
+        document.getElementById('resultado').style.color = "gray";
+        return;
+      }
+
+      const colores = ['rojo', 'negro'];
+      const resultado = colores[Math.floor(Math.random() * 2)];
+
+      if (eleccion === resultado) {
+        gemasActuales += recompensa;
+        document.getElementById('resultado').textContent = `✅ ¡Ganaste! Salió ${resultado}. +${recompensa} gemas`;
+        document.getElementById('resultado').style.color = "lightgreen";
+      } else {
+        gemasActuales -= costo;
+        document.getElementById('resultado').textContent = `❌ Perdiste. Salió ${resultado}. -${costo} gemas`;
+        document.getElementById('resultado').style.color = "salmon";
+      }
+
+      // Guardar en localStorage y actualizar UI
+      localStorage.setItem('gemas', gemasActuales.toString());
+      document.getElementById('gemas-count').textContent = gemasActuales;
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fortune Line</title>
+  <style> 
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-image: linear-gradient(
+    rgba(0, 0, 0, 0.7),
+      rgba(0, 0, 0, 0.7)),
+      url(nana-anime-trapnest-album-8wmdxqsdxyi75gm4.jpg);
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+img {
+  margin-top: 20px;
+  margin: 10px;
+  margin-top: 20px;
+  position: absolute;
+  top: 10px; 
+  left: 10px; 
+  width: 200px; 
+  height: auto; 
+}
+
+
+.login-container {
+  background-color: rgba(20, 20, 20, 0.85);
+  padding: 40px 30px;
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  width: 300px;
+  color: #f1f1f1;
+  animation: fadeIn 1s ease;
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+.titulo {
+  font-size: 24px;
+  margin-bottom: 30px;
+  color: #ffffff;
+}
+
+
+label {
+  display: block;
+  text-align: left;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #cccccc;
+}
+
+input[type="text"],
+input[type="password"] {
+  padding: 12px;
+  padding-right: 110px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #1e1e1e;
+  color: #fff;
+  font-size: 14px;
+}
+
+input:focus {
+  background-color: #333;
+  outline: none;
+}
+
+
+button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  background-color: #4a4a4a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #5e5e5e;
+  transform: scale(1.02);
+}
+
+/* Enlace de crear cuenta */
+p {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+a {
+  color: #aaa;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+</style>
+
+
+  <script>
+    function verificarLogin(event) {
+      event.preventDefault();
+
+      const usuario = document.getElementById("usuario").value.trim();
+      const contraseña = document.getElementById("contraseña").value;
+      const cuentaGuardada = JSON.parse(localStorage.getItem("cuentaGuardada"));
+
+      if (!cuentaGuardada) {
+        alert("No hay ninguna cuenta registrada. Crea una primero.");
+        return;
+      }
+
+      if (usuario === cuentaGuardada.usuario && contraseña === cuentaGuardada.contraseña) {
+        alert("Inicio de sesión exitoso.");
+        window.location.href = "index.html"; // ← cambio hecho aquí
+      } else {
+        alert("Usuario o contraseña incorrectos.");
+      }
+    }
+  </script>
+</head>
+<body>
+  <img src="logo.png" alt="">
+  <div class="login-container">
+    <h2 class="titulo">Iniciar Sesión</h2>
+    <form onsubmit="verificarLogin(event)">
+      <label for="usuario">Usuario:</label>
+      <input type="text" id="usuario" name="usuario" required>
+
+      <label for="contraseña">Contraseña:</label>
+      <input type="password" id="contraseña" name="contraseña" required>
+
+      <button type="submit">Ingresar</button>
+    </form>
+
+    <p>¿No tienes cuenta? <a href="crearcuenta.html">Crear cuenta</a></p>
+  </div>
+</body>
+</html>

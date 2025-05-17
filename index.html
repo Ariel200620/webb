@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fortune Line</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-image: linear-gradient(
+    rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)),
+      url(d86a69f18bcb6c69aba18c27e6cf58fb.gif);
+      background-repeat: no-repeat;       
+  background-size: cover;              
+  background-position: center center;   
+  background-attachment: fixed;        
+ 
+      color: #ffffff;
+    }
+
+    header {
+      background-color:#1c1f24;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+    }
+
+    header img {
+      height: 50px;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: #58a6ff;
+    }
+
+    .submenu {
+      
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 30px;
+    
+    }
+
+    .ordenar select {
+      background-color: #0d1117;
+      color: white;
+      border: 1px solid #2f3b4a;
+      padding: 5px;
+      border-radius: 6px;
+    }
+
+    .gemas-display {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .gemas-display img {
+      height: 24px;
+    }
+
+    .gemas-display a {
+      background-color: #2563eb;
+      color: white;
+      padding: 5px 10px;
+      padding-right: 2px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .juegos-section {
+      display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 20px;
+ padding: 30px 20px;
+  justify-items: center; 
+
+}
+
+    .juego-card {
+      background-color: rgba(0, 0, 0, 0.4);
+      width: 300px;
+      height: 300px;
+      border-radius: 12px;
+      overflow: hidden;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .juego-card:hover {
+      transform: scale(1.05);
+    }
+
+    .juego-card img {
+  margin: 16px;
+  margin-right: 16px; 
+  width: calc(100% - 32px);  
+  height: 70%;
+  object-fit: cover;  
+}
+    .juego-card h3 {
+      font-size: 14px;
+      padding: 10px 0;
+      color: #ffffff;
+    }
+
+    #tienda {
+      padding: 40px 30px;
+      background-color: #0d1117;
+    }
+
+    #tienda h2 {
+      margin-bottom: 20px;
+      text-align: center;
+      color: #ffffff;
+    }
+
+    .gemas-contenedor {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .gemas-card {
+      background-color: #1c1f24;
+      width: 200px;
+      height: 200px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+
+    .gemas-card:hover {
+      transform: scale(1.05);
+    }
+
+    .gemas-card img {
+      width: 60px;
+      margin-bottom: 10px;
+    }
+
+    .gemas-card p {
+      font-size: 14px;
+      color: #ffffff;
+    }
+
+    .btn-comprar {
+  display: none;
+  margin-top: 10px;
+  background-color: #4779e7;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-weight: bold;
+}
+
+.gemas-card:hover .btn-comprar {
+  display: block;
+}
+
+.btn-comprar:hover {
+  background-color: #1e40af;
+}
+
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #161b22;
+      color: #999;
+    }
+    @media (max-width: 768px) {
+  .juegos-section {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .juegos-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+      }
+    }
+  </style>
+
+  
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="Logo">
+    <nav>
+      <a href="perfil.html">Perfil</a>
+      <a href="#tienda">Gemas</a>
+      <a href="futbol.html">Fútbol</a>
+      <a href="#">Contáctanos</a>
+    </nav>
+  </header>
+
+  <div class="submenu">
+    <div class="ordenar">
+      <label for="orden">Ordenar juegos:</label>
+      <select id="orden">
+        <option value="az">A-Z</option>
+        <option value="za">Z-A</option>
+        <option value="relevancia_mayor">Mayor relevancia</option>
+        <option value="relevancia_menor">Menor relevancia</option>
+      </select>
+    </div>
+    <div class="gemas-display">
+      <img src="gema.jpg" alt="Gemas">
+      <span>50</span>
+      <a href="#tienda">+</a>
+    </div>
+  </div>
+
+  <section class="juegos-section">
+    <div class="juego-card" onclick="location.href='juego1.html'">
+      <img src="tragamonedas.jpg" alt="Tragamonedas">
+      <h3>Rojo y Negro</h3>
+    </div>
+    <div class="juego-card" onclick="location.href='juego2.html'">
+      <img src="ruleta.jpg" alt="Ruleta">
+      <h3>Ruleta</h3>
+    </div>
+    <div class="juego-card" onclick="location.href='juego3.html'">
+      <img src="blackjack.jpg" alt="Blackjack">
+      <h3>Blackjack</h3>
+    </div>
+    <div class="juego-card" onclick="location.href='juego4.html'">
+      <img src="poker.jpg" alt="Poker">
+      <h3>Póker</h3>
+    </div>
+    <div class="juego-card" onclick="location.href='juego5.html'">
+      <img src="dados.jpg" alt="Dados">
+      <h3>Dados</h3>
+    </div>
+    <div class="juego-card" onclick="location.href='juego6.html'">
+      <img src="baccarat.jpg" alt="Baccarat">
+      <h3>Piedra, Papel o Tijera</h3>
+    </div>
+    <div class="juego-card" onclick="location.href='juego7.html'">
+      <img src="keno.jpg" alt="Keno">
+      <h3>Keno</h3>
+    </div>
+    <div class="juego-card" onclick="location.href='juego8.html'">
+      <img src="bingo.jpg" alt="Bingo">
+      <h3>Bingo</h3>
+    </div>
+    <div class="juego-card" onclick="location.href='juego10.html'">
+      <img src="ruletadelafortuna.jpg" alt="Rueda de la fortuna">
+      <h3>Raspa y Gana</h3>
+    </div>
+  </section>
+
+  <section id="tienda">
+    <h2>Tienda</h2>
+    <div class="gemas-contenedor">
+      <div class="gemas-card" onclick="comprar(50, 10)">
+        <img src="50gemas.jpg" alt="Gemas">
+        <p>50 gemas - S/ 10</p>
+        <button class="btn-comprar">Comprar</button>
+      </div>
+      <div class="gemas-card" onclick="comprar(100, 20)">
+        <img src="100gemas.jpg" alt="Gemas">
+        <p>100 gemas - S/ 20</p>
+        <button class="btn-comprar">Comprar</button>
+      </div>
+      <div class="gemas-card" onclick="comprar(250, 50)">
+        <img src="250gemas.jpg" alt="Gemas">
+        <p>250 gemas - S/ 50</p>
+        <button class="btn-comprar">Comprar</button>
+      </div>
+      <div class="gemas-card" onclick="comprar(500, 95)">
+        <img src="500gemas.jpg" alt="Gemas">
+        <p>500 gemas - S/ 95</p>
+        <button class="btn-comprar">Comprar</button>
+      </div>
+    </div>
+  </section>
+  
+  <footer>
+    &copy; 2025 Casino Virtual. Todos los derechos reservados.
+  </footer>
+
+  <script>
+    // Cargar las gemas desde localStorage al cargar la página
+    let gemasActuales = localStorage.getItem('gemas') ? parseInt(localStorage.getItem('gemas')) : 50;
+  
+    // Verificar si hay tarjeta registrada en el localStorage
+    let tarjetaRegistrada = localStorage.getItem('tarjetaRegistrada') ? true : false;
+  
+    // Función para actualizar el contador de gemas en la página
+    function actualizarContadorGemas() {
+      document.querySelector(".gemas-display span").textContent = gemasActuales;
+    }
+  
+    // Inicializar el contador al cargar la página
+    actualizarContadorGemas();
+  
+    // Función de compra de gemas
+    function comprar(cantidad, precio) {
+      if (!tarjetaRegistrada) {
+        alert("Debe registrar una tarjeta antes de comprar.");
+        window.location.href = "perfil.html"; // Redirigir a la página de perfil
+        return;
+      }
+  
+      gemasActuales += cantidad;  // Aumentar las gemas
+      localStorage.setItem('gemas', gemasActuales);  // Guardar las gemas en localStorage
+      actualizarContadorGemas();  // Actualizar el contador en la página
+      alert(`¡Has comprado ${cantidad} gemas por S/ ${precio}!`);
+    }
+  
+    // Función para restar gemas después de jugar o perder
+    function perderGemas(cantidad) {
+      gemasActuales -= cantidad;  // Reducir las gemas
+      if (gemasActuales < 0) gemasActuales = 0;  // Asegurarse de que las gemas no bajen de 0
+      localStorage.setItem('gemas', gemasActuales);  // Guardar el nuevo valor en localStorage
+      actualizarContadorGemas();  // Actualizar el contador en la página
+    }
+  
+    // Función para ganar gemas después de un juego
+    function ganarGemas(cantidad) {
+      gemasActuales += cantidad;  // Aumentar las gemas
+      localStorage.setItem('gemas', gemasActuales);  // Guardar el nuevo valor en localStorage
+      actualizarContadorGemas();  // Actualizar el contador en la página
+    }
+  </script>
+
+ 
+</body>
+</html>
